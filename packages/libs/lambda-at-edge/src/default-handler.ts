@@ -573,6 +573,14 @@ const hasFallbackForUri = (
   if (ssr.nonDynamic[uri] || html.nonDynamic[uri]) {
     return false;
   }
+  const hasDynamicSSR = Object.values(ssr.dynamic).find((route) => {
+    const re = new RegExp(route.regex);
+    return re.test(uri);
+  });
+
+  if (hasDynamicSSR) {
+    return false;
+  }
 
   return Object.values(prerenderManifest.dynamicRoutes).find((routeConfig) => {
     const re = new RegExp(routeConfig.routeRegex);
